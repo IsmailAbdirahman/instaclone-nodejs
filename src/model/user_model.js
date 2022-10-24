@@ -5,10 +5,11 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
 const userSchema = mongoose.Schema({
-    name: {
+    username: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        unique: true
     },
     email: {
         type: String,
@@ -37,12 +38,25 @@ const userSchema = mongoose.Schema({
 
     ],
 
+    following: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'User'
+    }
+    ],
+
+    follower: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: 'User'
+        }
+    ]
+
 })
 
-userSchema.virtual('myPosts',{
-    ref:'Post',
-    localField:'_id',
-    foreignField:'author'
+userSchema.virtual('myPosts', {
+    ref: 'Post',
+    localField: '_id',
+    foreignField: 'author'
 
 })
 
