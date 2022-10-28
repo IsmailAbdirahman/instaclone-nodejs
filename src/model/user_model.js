@@ -49,7 +49,9 @@ const userSchema = mongoose.Schema({
             type: mongoose.Types.ObjectId,
             ref: 'User'
         }
-    ]
+    ],
+
+    likedPosts: [{ type: mongoose.Types.ObjectId, ref: 'Post' }]
 
 })
 

@@ -63,26 +63,29 @@ router.get('/userpost/likedPost/:id', auth, async (req, res) => {
     try {
         const userID = req.user._id
         const postID = req.params.id
-        const postToLike = await UserPosts.findOne({ _id: postID })
+        const post = await UserPosts.findOne({ _id: postID })
+        const myProfile = await User.findOne({ _id: userID })
 
-        if (postToLike.likes.includes(userID)) {
-            postToLike.likes.pull(userID)
-            await postToLike.save()
-            return res.send(postToLike)
+        if (post.likes.includes(userID) && myProfile.likedPosts.includes(postID)) {
+
+            post.likes.pull(userID)
+            myProfile.likedPosts.pull(postID)
+            await post.save()
+            await myProfile.save()
+            return res.send(post)
         }
 
-        postToLike.likes = postToLike.likes.concat(userID)
+        post.likes = post.likes.concat(userID)
+        myProfile.likedPosts = myProfile.likedPosts.concat(postID)
+        await post.save()
+        await myProfile.save()
 
-        await postToLike.save()
-        res.send(postToLike)
-
+        res.send({ myProfile, post })
 
     } catch (error) {
         res.send(error)
 
     }
-
-
 
 })
 
