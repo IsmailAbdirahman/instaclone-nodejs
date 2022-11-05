@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 mongoose.pluralize(null);
 
+var fs = require('fs');
+var path = require('path');
+require('dotenv/config');
+
 const postSchema = mongoose.Schema({
 
     caption: {
@@ -17,9 +21,18 @@ const postSchema = mongoose.Schema({
         ref: "User"
     },
 
+    image: {
+      type:String
+    },
+
     likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }],
 
-
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     }]
 
 })

@@ -38,7 +38,8 @@ router.post('/users/login', async (req, res) => {
 
 
 router.get('/users/myProfile', auth, async (req, res) => {
-    res.status(200).send(req.user)
+    const myProfile = req.user;
+    res.status(200).send(myProfile)
 })
 
 

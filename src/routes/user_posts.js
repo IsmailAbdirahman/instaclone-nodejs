@@ -5,6 +5,7 @@ const router = express.Router()
 const User = require('../model/user_model')
 
 
+
 router.post('/userPost/createPost', auth, async (req, res) => {
 
     try {
@@ -16,6 +17,12 @@ router.post('/userPost/createPost', auth, async (req, res) => {
             'author': userID
 
         })
+
+        const myPostsList = await User.findOne({ _id: userID })
+        myPostsList.myPosts = post._id;
+        console.log(myPostsList.myPosts);
+        await myPostsList.save()
+
 
         await post.save()
         res.send(post)
@@ -79,8 +86,8 @@ router.get('/userpost/likedPost/:id', auth, async (req, res) => {
         myProfile.likedPosts = myProfile.likedPosts.concat(postID)
         await post.save()
         await myProfile.save()
+        res.send(post)
 
-        res.send({ myProfile, post })
 
     } catch (error) {
         res.send(error)
@@ -90,6 +97,32 @@ router.get('/userpost/likedPost/:id', auth, async (req, res) => {
 })
 
 
+router.get('/userpost/getAllPosts', async (req, res) => {
+    const postsList = await UserPosts.find({})
+    res.send({ postsList });
+
+
+
+})
+
+router.get('/userpost/getMyFollowingsPosts', auth, async (req, res) => {
+
+    const myID = req.user._id
+
+    const me = await User.
+        findOne({ _id: myID }).
+        populate({
+            path: 'following', select: 'myPosts username following follower',
+            populate: { path: 'myPosts' }
+        });
+
+
+    res.send(me)
+
+
+
+
+})
 
 
 

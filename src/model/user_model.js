@@ -51,16 +51,20 @@ const userSchema = mongoose.Schema({
         }
     ],
 
-    likedPosts: [{ type: mongoose.Types.ObjectId, ref: 'Post' }]
+    likedPosts: [{ type: mongoose.Types.ObjectId, ref: 'Post' }],
+
+    myPosts: [{ type: mongoose.Types.ObjectId, ref: 'Post' }]
+
+
 
 })
 
-userSchema.virtual('myPosts', {
-    ref: 'Post',
-    localField: '_id',
-    foreignField: 'author'
+// userSchema.virtual('myPosts', {
+//     ref: 'Post',
+//     localField: '_id',
+//     foreignField: 'author'
 
-})
+// })
 
 userSchema.methods.ganerateAuthToken = async function () {
 
