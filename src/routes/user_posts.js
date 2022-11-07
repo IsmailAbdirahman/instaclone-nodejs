@@ -42,7 +42,10 @@ router.get('/userPost/me', auth, async (req, res) => {
 
         const user = await User.findById(_id)
         await user.populate('myPosts')
-        res.send(user.myPosts)
+
+        const prfile = await User.findOne(_id)
+        const myPosts = user.myPosts;
+        res.send({ myPosts })
 
     } catch (error) {
 
@@ -107,24 +110,20 @@ router.get('/userpost/getAllPosts', async (req, res) => {
 
 router.get('/userpost/getMyFollowingsPosts', auth, async (req, res) => {
 
-    const myID = req.user._id
+    try {
+        const myFollowingPosts = await UserPosts.find({ author: { $in: req.user.following } })
+        res.send(myFollowingPosts)
+    } catch (error) {
+        res.send('something went wrong')
 
-    const me = await User.
-        findOne({ _id: myID }).
-        populate({
-            path: 'following', select: 'myPosts username following follower',
-            populate: { path: 'myPosts' }
-        });
-
-
-    res.send(me)
-
-
-
+    }
 
 })
 
+router.get('/userpost/getMyFollowingProfile', auth, async (req, res) => {
+    const followingProfiles = await User.find({ _id: { $in: req.user.following } })
+    res.send(followingProfiles)
 
-
+})
 
 module.exports = router

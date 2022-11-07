@@ -38,8 +38,19 @@ router.post('/users/login', async (req, res) => {
 
 
 router.get('/users/myProfile', auth, async (req, res) => {
-    const myProfile = req.user;
-    res.status(200).send(myProfile)
+    try {
+        const _id = req.user._id
+
+        const user = await User.findById(_id)
+        await user.populate('myPosts')
+
+        const profile = await User.findOne(_id)
+        const myPosts = user.myPosts;
+        res.send({profile, myPosts})
+
+    } catch (error) {
+
+    }
 })
 
 
