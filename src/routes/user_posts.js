@@ -81,6 +81,7 @@ router.get('/userpost/likedPost/:id', auth, async (req, res) => {
             post.likes.pull(userID)
             myProfile.likedPosts.pull(postID)
             await post.save()
+            await post.populate('author')
             await myProfile.save()
             return res.send(post)
         }
@@ -88,6 +89,8 @@ router.get('/userpost/likedPost/:id', auth, async (req, res) => {
         post.likes = post.likes.concat(userID)
         myProfile.likedPosts = myProfile.likedPosts.concat(postID)
         await post.save()
+        await post.populate('author')
+
         await myProfile.save()
         res.send(post)
 
@@ -111,7 +114,7 @@ router.get('/userpost/getAllPosts', async (req, res) => {
 router.get('/userpost/getMyFollowingsPosts', auth, async (req, res) => {
 
     try {
-        const myFollowingPosts = await UserPosts.find({ author: { $in: req.user.following } })
+        const myFollowingPosts = await UserPosts.find({ author: { $in: req.user.following } }).populate('author')
         res.send(myFollowingPosts)
     } catch (error) {
         res.send('something went wrong')
