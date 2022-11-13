@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs')
 
 const User = require('../model/user_model')
 const UserPosts = require('../model/user_posts')
+const UserInfoController = require('../controllers/user_info_controller')
 
 
 
@@ -46,11 +47,29 @@ router.get('/users/myProfile', auth, async (req, res) => {
 
         const profile = await User.findOne(_id)
         const myPosts = user.myPosts;
-        res.send({profile, myPosts})
+
+
+        res.send({ profile, myPosts })
 
     } catch (error) {
 
     }
+})
+
+
+router.get('/users/viewProfile/:id', auth, async (req, res) => {
+    try {
+        const user = await User.findOne({ _id: req.params.id })
+        await user.populate('myPosts')
+        const posts = user.myPosts
+
+        const status = await UserInfoController.profileStatus(req, res)
+        res.send({ user, posts, status })
+    } catch (error) {
+        res.send(error)
+    }
+
+
 })
 
 

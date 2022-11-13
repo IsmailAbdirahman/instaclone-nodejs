@@ -123,7 +123,7 @@ router.get('/userpost/getMyFollowingsPosts', auth, async (req, res) => {
 
 })
 
-router.get('/userpost/getMyFollowingProfile', auth, async (req, res) => {
+router.get('/users/getMyFollowingProfile', auth, async (req, res) => {
     const followingProfiles = await User.find({ _id: { $in: req.user.following } })
     res.send(followingProfiles)
 
