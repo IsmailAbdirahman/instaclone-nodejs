@@ -46,10 +46,10 @@ router.get('/users/myProfile', auth, async (req, res) => {
         await user.populate('myPosts')
 
         const profile = await User.findOne(_id)
-        const myPosts = user.myPosts;
+        const posts = user.myPosts;
 
 
-        res.send({ profile, myPosts })
+        res.send({ profile, posts })
 
     } catch (error) {
 
@@ -59,12 +59,12 @@ router.get('/users/myProfile', auth, async (req, res) => {
 
 router.get('/users/viewProfile/:id', auth, async (req, res) => {
     try {
-        const user = await User.findOne({ _id: req.params.id })
-        await user.populate('myPosts')
-        const posts = user.myPosts
+        const profile = await User.findOne({ _id: req.params.id })
+        await profile.populate('myPosts')
+        const posts = profile.myPosts
 
         const status = await UserInfoController.profileStatus(req, res)
-        res.send({ user, posts, status })
+        res.send({ profile, posts, status })
     } catch (error) {
         res.send(error)
     }
