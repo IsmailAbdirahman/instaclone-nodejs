@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 
-mongoose.connect('mongodb://127.0.0.1:27017/insta-clone-api', {
+mongoose.connect('mongodb+srv://ismail_i3:12121212@cluster0.w8r6oh5.mongodb.net/test', {
     useNewUrlParser: true
 
 
