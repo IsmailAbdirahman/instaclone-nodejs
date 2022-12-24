@@ -52,6 +52,7 @@ router.get('/users/myProfile', auth, async (req, res) => {
         res.send({ profile, posts })
 
     } catch (error) {
+        res.send(error)
 
     }
 })

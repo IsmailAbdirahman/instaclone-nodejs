@@ -29,6 +29,7 @@ router.post('/userPost/createPost', auth, async (req, res) => {
 
 
     } catch (error) {
+        res.send(error)
 
     }
 
@@ -48,7 +49,7 @@ router.get('/userPost/me', auth, async (req, res) => {
         res.send({ myPosts })
 
     } catch (error) {
-
+        res.send(error)
     }
 
 })
