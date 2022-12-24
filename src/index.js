@@ -1,5 +1,5 @@
 const express = require('express')
-const userRouter = require('./routes/user_route')
+const userRouter = require('./routes/user_info')
 const userPostsRouter = require('./routes/user_posts')
 require('./db/mongoose')
 //const mongoose = require('mongoose')

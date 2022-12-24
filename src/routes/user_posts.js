@@ -129,4 +129,39 @@ router.get('/users/getMyFollowingProfile', auth, async (req, res) => {
 
 })
 
+router.get('/users/getSingleUserFollowingProfiles/:id', auth, async (req, res) => {
+    try {
+        const userId = req.params.id
+
+        const user = await User.findOne({ _id: userId })
+
+        const profileList =await User.find({_id: {$in: user.following}})
+
+
+        res.send({ profileList })
+
+    } catch (error) {
+        res.send({ error })
+
+    }
+})
+
+
+router.get('/users/getSingleUserFollowerProfiles/:id', auth, async (req, res) => {
+    try {
+        const userId = req.params.id
+
+        const user = await User.findOne({ _id: userId })
+
+        const profileList =await User.find({_id: {$in: user.follower}})
+
+
+        res.send({ profileList })
+
+    } catch (error) {
+        res.send({ error })
+
+    }
+})
+
 module.exports = router
