@@ -105,8 +105,12 @@ router.get('/userpost/likedPost/:id', auth, async (req, res) => {
 
 
 router.get('/userpost/getAllPosts', async (req, res) => {
-    const postsList = await UserPosts.find({})
-    res.send({ postsList });
+   try {
+	 const postsList = await UserPosts.find({})
+	    res.send({ postsList });
+} catch (error) {
+	res.send(error)
+}
 
 
 
@@ -125,8 +129,12 @@ router.get('/userpost/getMyFollowingsPosts', auth, async (req, res) => {
 })
 
 router.get('/users/getMyFollowingProfile', auth, async (req, res) => {
-    const followingProfiles = await User.find({ _id: { $in: req.user.following } })
-    res.send(followingProfiles)
+   try {
+	 const followingProfiles = await User.find({ _id: { $in: req.user.following } })
+	    res.send(followingProfiles)
+} catch (error) {
+    res.send(error)
+}
 
 })
 
