@@ -119,7 +119,7 @@ router.post('/users/edit-profile', auth, async (req, res) => {
         me.password = req.params.password
         res.send(me)
 
-        await User.save()
+        await me.save()
     } catch (error) {
         res.send(error)
 
