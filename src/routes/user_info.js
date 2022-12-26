@@ -102,10 +102,30 @@ router.get('/users/follow-user/:id', auth, async (req, res) => {
         await userToFollowInfo.save()
         const status = await UserInfoController.profileStatus(req, res)
 
-        res.send({ status})
+        res.send({ status })
     } catch (e) {
         res.send(e)
     }
+
+})
+
+
+router.post('/users/edit-profile', auth, async (req, res) => {
+    try {
+        const myID = req.user._id
+        const me = await User.findOne({ _id: myID })
+
+        me.username = req.params.username
+        me.password = req.params.password
+        res.send(me)
+
+        await User.save()
+    } catch (error) {
+        res.send(error)
+
+    }
+
+
 
 })
 
