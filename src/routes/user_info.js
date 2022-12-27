@@ -112,13 +112,17 @@ router.get('/users/follow-user/:id', auth, async (req, res) => {
 
 router.post('/users/edit-profile', auth, async (req, res) => {
     try {
-        const myID = req.user._id
-        const me = await User.findOne({ _id: myID })
 
-        me.username = req.body.username
-        me.password = req.body.password
-        await me.save()
-        res.send(me)
+        const myID = req.user._id
+        const profile = await User.findOne({ _id: myID })
+
+        profile.username = req.body.username
+        profile.password = req.body.password
+      await  profile.save()
+
+        await profile.populate('myPosts')
+        const posts = await profile.myPosts
+        res.send({profile, posts})
     } catch (error) {
         res.send(error)
 
