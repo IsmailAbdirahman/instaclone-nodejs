@@ -115,17 +115,14 @@ router.post('/users/edit-profile', auth, async (req, res) => {
         const myID = req.user._id
         const me = await User.findOne({ _id: myID })
 
-        me.username = req.params.username
-        me.password = req.params.password
-        res.send(me)
-
+        me.username = req.body.username
+        me.password = req.body.password
         await me.save()
+        res.send(me)
     } catch (error) {
         res.send(error)
 
     }
-
-
 
 })
 
