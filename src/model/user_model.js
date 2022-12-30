@@ -59,6 +59,10 @@ const userSchema = mongoose.Schema({
 
 })
 
+userSchema.index({name: 'text', 'username': 'text'});
+
+
+
 userSchema.virtual('myPosts', {
     ref: 'Post',
     localField: '_id',

@@ -118,17 +118,34 @@ router.post('/users/edit-profile', auth, async (req, res) => {
 
         profile.username = req.body.username
         profile.password = req.body.password
-      await  profile.save()
+        await profile.save()
 
         await profile.populate('myPosts')
         const posts = await profile.myPosts
-        res.send({profile, posts})
+        res.send({ profile, posts })
     } catch (error) {
         res.send(error)
 
     }
 
 })
+
+
+router.post('/users/search-username', async (req, res) => {
+    try {
+
+        const username = req.body.username
+
+        const regex = new RegExp(username, 'i')
+        const profileList = await User.find({ username: { $regex: regex } })
+
+        res.send({profileList});
+
+    } catch (error) {
+
+        res.status(500).json({ message: error.message });
+    }
+});
 
 
 module.exports = router
