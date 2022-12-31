@@ -4,19 +4,7 @@ const auth = require('../middleware/auth')
 const router = express.Router()
 const User = require('../model/user_model')
 const cloudinary = require('cloudinary');
-const multer = require('multer');
-
-// SET STORAGE
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'images')
-    },
-    filename: function (req, file, cb) {
-        cb(null, new Date().toISOString().replace(/:/g, '').replace(/-/g, '') + file.originalname)
-    }
-  })
-
-var uploader = multer({ storage: storage })
+const uploader = require('../controllers/multer_storage')
 
 cloudinary.config({
     cloud_name: 'dveimvku4',
@@ -199,7 +187,7 @@ router.post("/users/upload", uploader.single("file"), async (req, res) => {
     console.log(upload);
     return res.send({
       success: true,
-      file: upload.secure_url,
+      image: upload.secure_url,
     });
   });
 

@@ -5,6 +5,12 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
 const userSchema = mongoose.Schema({
+
+
+    image: {
+        type: String,
+    },
+
     username: {
         type: String,
         required: true,
@@ -53,13 +59,13 @@ const userSchema = mongoose.Schema({
 
     likedPosts: [{ type: mongoose.Types.ObjectId, ref: 'Post' }],
 
-   // myPosts: [{ type: mongoose.Types.ObjectId, ref: 'Post' }]
+    // myPosts: [{ type: mongoose.Types.ObjectId, ref: 'Post' }]
 
 
 
 })
 
-userSchema.index({name: 'text', 'username': 'text'});
+userSchema.index({ name: 'text', 'username': 'text' });
 
 
 

@@ -7,12 +7,31 @@ const bcrypt = require('bcryptjs')
 const User = require('../model/user_model')
 const UserPosts = require('../model/user_posts')
 const UserInfoController = require('../controllers/user_info_controller')
+const uploader = require('../controllers/multer_storage')
+const cloudinary = require('cloudinary');
 
 
+cloudinary.config({
+    cloud_name: 'dveimvku4',
+    api_key: '766698321853973',
+    api_secret: 'oDWtlmsEzGf1K2P_2z736DithSw'
+});
 
-router.post('/users/createAccount', async (req, res) => {
+router.post('/users/createAccount', uploader.single("file"), async (req, res) => {
     try {
-        const data = req.body
+
+        const upload = await cloudinary.v2.uploader.upload(req.file.path);
+        console.log(upload.secure_url);
+
+        const data = {
+            username: req.body.username,
+            password: req.body.password,
+            email: req.body.email,
+            image: upload.secure_url
+        }
+
+        console.log(data);
+
         const user = new User(data)
         await user.save()
         const token = await user.ganerateAuthToken()
@@ -20,7 +39,7 @@ router.post('/users/createAccount', async (req, res) => {
         res.status(201).send(user)
 
     } catch (e) {
-        res.send(e)
+        res.send(e.message)
     }
 })
 
@@ -139,7 +158,7 @@ router.post('/users/search-username', async (req, res) => {
         const regex = new RegExp(username, 'i')
         const profileList = await User.find({ username: { $regex: regex } })
 
-        res.send({profileList});
+        res.send({ profileList });
 
     } catch (error) {
 
