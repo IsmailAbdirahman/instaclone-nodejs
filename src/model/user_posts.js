@@ -3,7 +3,6 @@ mongoose.pluralize(null);
 
 var fs = require('fs');
 var path = require('path');
-require('dotenv/config');
 
 const postSchema = mongoose.Schema({
 

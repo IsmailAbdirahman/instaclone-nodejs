@@ -15,7 +15,6 @@ const { populate } = require('./model/user_posts')
 // var path = require('path');
 // var multer = require('multer');
 // var cloudinary = require('cloudinary').v2;
-// require('dotenv/config');
 
 
 
@@ -40,8 +39,8 @@ const { populate } = require('./model/user_posts')
 //----------------------------------------------------------------------------------//
 const app = express()
 
-const PORT = process.env.PORT ||4000
-//const PORT = 4000
+//const PORT = process.env.PORT ||4000
+const PORT = 4000
 
 
 app.use(express.json())

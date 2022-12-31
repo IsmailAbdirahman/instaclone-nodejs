@@ -3,7 +3,26 @@ const UserPosts = require('../model/user_posts')
 const auth = require('../middleware/auth')
 const router = express.Router()
 const User = require('../model/user_model')
+const cloudinary = require('cloudinary');
+const multer = require('multer');
 
+// SET STORAGE
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'images')
+    },
+    filename: function (req, file, cb) {
+        cb(null, new Date().toISOString().replace(/:/g, '').replace(/-/g, '') + file.originalname)
+    }
+  })
+
+var uploader = multer({ storage: storage })
+
+cloudinary.config({
+    cloud_name: 'dveimvku4',
+    api_key: '766698321853973',
+    api_secret: 'oDWtlmsEzGf1K2P_2z736DithSw'
+  });
 
 
 router.post('/userPost/createPost', auth, async (req, res) => {
@@ -172,5 +191,18 @@ router.get('/users/getSingleUserFollowerProfiles/:id', auth, async (req, res) =>
 
     }
 })
+
+
+
+router.post("/users/upload", uploader.single("file"), async (req, res) => {
+    const upload = await cloudinary.v2.uploader.upload(req.file.path);
+    console.log(upload);
+    return res.send({
+      success: true,
+      file: upload.secure_url,
+    });
+  });
+
+
 
 module.exports = router
