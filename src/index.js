@@ -7,7 +7,14 @@ require('./db/mongoose')
 const UserPosts = require('./model/user_posts')
 const User = require('./model/user_model')
 const { populate } = require('./model/user_posts')
+const cloudinary = require('cloudinary');
 
+
+cloudinary.config({
+    cloud_name: 'dveimvku4',
+    api_key: '766698321853973',
+    api_secret: 'oDWtlmsEzGf1K2P_2z736DithSw'
+});
 
 // var bodyParser = require('body-parser');
 // const cors = require('cors');
@@ -39,8 +46,8 @@ const { populate } = require('./model/user_posts')
 //----------------------------------------------------------------------------------//
 const app = express()
 
-const PORT = process.env.PORT ||4000
-//const PORT = 4000
+//const PORT = process.env.PORT ||4000
+const PORT = 4000
 
 
 app.use(express.json())

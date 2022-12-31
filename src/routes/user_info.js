@@ -11,11 +11,7 @@ const uploader = require('../controllers/multer_storage')
 const cloudinary = require('cloudinary');
 
 
-cloudinary.config({
-    cloud_name: 'dveimvku4',
-    api_key: '766698321853973',
-    api_secret: 'oDWtlmsEzGf1K2P_2z736DithSw'
-});
+
 
 router.post('/users/createAccount', uploader.single("file"), async (req, res) => {
     try {

@@ -6,14 +6,15 @@ var path = require('path');
 
 const postSchema = mongoose.Schema({
 
+    image:{
+        type: String
+    },
+
     caption: {
         type: String,
         required: true,
     },
 
-    countLikes: {
-        type: Number,
-    },
 
     author: {
         type: mongoose.Schema.Types.ObjectId,
