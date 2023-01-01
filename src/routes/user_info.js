@@ -79,7 +79,7 @@ router.get('/users/viewProfile/:id', auth, async (req, res) => {
         await profile.populate('myPosts')
         const posts = profile.myPosts
 
-        const status = await UserInfoController.profileStatus(req, res)
+        const status = await UserInfoController.profileStatus(req.user._id, req.params.id)
         res.send({ profile, posts, status })
     } catch (error) {
         res.send(error)
@@ -87,6 +87,31 @@ router.get('/users/viewProfile/:id', auth, async (req, res) => {
 
 
 })
+
+
+router.post('/users/search-username', auth, async (req, res) => {
+    try {
+
+        const selectedIndex = req.body.selectedIndex
+        const username = req.body.username
+        const regex = new RegExp(username, 'i')
+        const profile = await User.find({ username: { $regex: regex } }).limit(6)
+
+        const myID = req.user._id
+        const userID = profile[selectedIndex]._id
+
+        const result = await profile[selectedIndex].populate('myPosts')
+        const posts = await result.myPosts
+
+        const status = await UserInfoController.profileStatus(myID, userID)
+
+        res.send({ profile, posts, status })
+
+    } catch (error) {
+
+        res.send(error.message)
+    }
+});
 
 
 
@@ -146,21 +171,7 @@ router.post('/users/edit-profile', auth, async (req, res) => {
 })
 
 
-router.post('/users/search-username', async (req, res) => {
-    try {
 
-        const username = req.body.username
-
-        const regex = new RegExp(username, 'i')
-        const profileList = await User.find({ username: { $regex: regex } })
-
-        res.send({ profileList });
-
-    } catch (error) {
-
-        res.status(500).json({ message: error.message });
-    }
-});
 
 
 module.exports = router
