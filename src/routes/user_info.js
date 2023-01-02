@@ -92,7 +92,7 @@ router.get('/users/viewProfile/:id', auth, async (req, res) => {
 router.post('/users/search-username', auth, async (req, res) => {
     try {
 
-        const selectedIndex = req.body.selectedIndex
+        const selectedIndex = req.body.selectedIndex | 0
         const username = req.body.username
         const regex = new RegExp(username, 'i')
         const profile = await User.find({ username: { $regex: regex } }).limit(6)
