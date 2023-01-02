@@ -92,20 +92,20 @@ router.get('/users/viewProfile/:id', auth, async (req, res) => {
 router.post('/users/search-username', auth, async (req, res) => {
     try {
 
-        const selectedIndex = req.body.selectedIndex |"0"
+        // const selectedIndex = req.body.selectedIndex |"0"
         const username = req.body.username
         const regex = new RegExp(username, 'i')
         const profile = await User.find({ username: { $regex: regex } }).limit(6)
 
-        const myID = req.user._id
-        const userID = profile[selectedIndex]._id
+        // const myID = req.user._id
+        // const userID = profile[selectedIndex]._id
 
-        const result = await profile[selectedIndex].populate('myPosts')
-        const posts = await result.myPosts
+        // const result = await profile[selectedIndex].populate('myPosts')
+        // const posts = await result.myPosts
 
-        const status = await UserInfoController.profileStatus(myID, userID)
+        // const status = await UserInfoController.profileStatus(myID, userID)
 
-        res.send({ profile, posts, status })
+        res.send({ profile })
 
     } catch (error) {
 
