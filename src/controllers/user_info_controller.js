@@ -10,7 +10,7 @@ const profileStatus = async (myID, userID) => {
 		console.log(result);
 
 		if (myID == userID) {
-			return status = ''
+			return status = null
 		}
 
 		if (result) {
