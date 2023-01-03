@@ -81,9 +81,7 @@ router.get('/users/viewProfile/:id', auth, async (req, res) => {
 
         const status = await UserInfoController.profileStatus(req.user._id, req.params.id)
 
-        if (req.user._id == req.params.id) {
-            return status = ''
-        }
+
         res.send({ profile, posts, status })
     } catch (error) {
         res.send(error)

@@ -9,6 +9,10 @@ const profileStatus = async (myID, userID) => {
 		const result = await isFollowing(myID, userID)
 		console.log(result);
 
+		if (myID == userID) {
+			return status = ''
+		}
+
 		if (result) {
 			return status = 'following'
 		}
