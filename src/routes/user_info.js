@@ -159,7 +159,6 @@ router.post('/users/edit-profile', auth, async (req, res) => {
         const profile = await User.findOne({ _id: myID })
 
         profile.username = req.body.username
-        profile.password = req.body.password
         await profile.save()
 
         await profile.populate('myPosts')
