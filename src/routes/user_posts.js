@@ -124,12 +124,9 @@ router.get('/userpost/getMyFollowingsPosts', auth, async (req, res) => {
 
     try {
         const myID = req.user._id
-        const myInfo = await User.findById({"_id": myID})
-        await myInfo.populate('myPosts')
-
-        const myPosts = await myInfo.myPosts
 
 
+        const myPosts = await UserPosts.find({ author: { $in: myID } }).populate('author')
         const myFollowingPosts = await UserPosts.find({ author: { $in: req.user.following } }).populate('author')
 
         const posts = myPosts.concat(myFollowingPosts)
