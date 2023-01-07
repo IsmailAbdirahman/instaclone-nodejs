@@ -133,7 +133,7 @@ router.get('/users/follow-user/:id', auth, async (req, res) => {
             userToFollowInfo.follower.pull(myID)
             await me.save()
             await userToFollowInfo.save()
-            const status = await UserInfoController.profileStatus(req, res)
+            const status = await UserInfoController.profilseStatus(myID, userToFollowID)
 
             return res.send({ status })
         }
@@ -142,7 +142,7 @@ router.get('/users/follow-user/:id', auth, async (req, res) => {
         userToFollowInfo.follower = userToFollowInfo.follower.concat(myID)
         await me.save()
         await userToFollowInfo.save()
-        const status = await UserInfoController.profileStatus(req, res)
+        const status = await UserInfoController.profileStatus(myID, userToFollowID)
 
         res.send({ status })
     } catch (e) {
