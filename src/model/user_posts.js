@@ -6,7 +6,7 @@ var path = require('path');
 
 const postSchema = mongoose.Schema({
 
-    image:{
+    image: {
         type: String
     },
 
@@ -22,7 +22,7 @@ const postSchema = mongoose.Schema({
     },
 
     image: {
-      type:String
+        type: String
     },
 
     likes: [{
@@ -35,7 +35,11 @@ const postSchema = mongoose.Schema({
         ref: "User"
     }]
 
-})
+},
+    {
+        timestamps: true,
+    }
+)
 
 
 
