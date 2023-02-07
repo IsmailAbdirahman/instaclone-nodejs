@@ -11,9 +11,9 @@ const cloudinary = require('cloudinary');
 
 
 cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.API_KEY,
-    api_secret: process.env.API_SECRET
+    cloud_name: dveimvku4,
+    api_key: 766698321853973,
+    api_secret: oDWtlmsEzGf1K2P_2z736DithSw
 });
 
 // var bodyParser = require('body-parser');
