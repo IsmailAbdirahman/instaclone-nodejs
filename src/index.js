@@ -11,9 +11,9 @@ const cloudinary = require('cloudinary');
 
 
 cloudinary.config({
-    cloud_name: dveimvku4,
+    cloud_name: "dveimvku4",
     api_key: 766698321853973,
-    api_secret: oDWtlmsEzGf1K2P_2z736DithSw
+    api_secret: "oDWtlmsEzGf1K2P_2z736DithSw"
 });
 
 // var bodyParser = require('body-parser');
@@ -46,7 +46,7 @@ cloudinary.config({
 //----------------------------------------------------------------------------------//
 const app = express()
 
-const PORT = process.env.PORT || 4000
+const PORT = process.env.PORT || 9000
 //const PORT = 4000
 
 
