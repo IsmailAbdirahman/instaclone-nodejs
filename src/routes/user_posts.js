@@ -126,8 +126,8 @@ router.get('/userpost/getMyFollowingsPosts', auth, async (req, res) => {
         const myID = req.user._id
 
 
-        const myPosts = await UserPosts.find({ author: { $in: myID } }).populate('author').sort({ 'createdAt': -1 })
-        const myFollowingPosts = await UserPosts.find({ author: { $in: req.user.following } }).populate('author').sort({ 'createdAt': -1 })
+        const myPosts = await UserPosts.find({ author: { $in: myID } }).sort({ 'createdAt': -1 })
+        const myFollowingPosts = await UserPosts.find({ author: { $in: req.user.following } }).sort({ 'createdAt': -1 })
 
         const posts = myPosts.concat(myFollowingPosts)
         res.send(posts)
