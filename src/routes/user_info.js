@@ -53,24 +53,24 @@ router.post('/users/login', async (req, res) => {
 })
 
 
-// router.get('/users/myProfile', auth, async (req, res) => {
-//     try {
-//         const _id = req.user._id
+router.get('/users/myProfile', auth, async (req, res) => {
+    try {
+        const _id = req.user._id
 
-//         const user = await User.findById(_id)
-//         await user.populate('myPosts')
+        const user = await User.findById(_id)
+        await user.populate('myPosts')
 
-//         const profile = await User.findOne(_id)
-//         const posts = user.myPosts;
+        const profile = await User.findOne(_id)
+        const posts = user.myPosts;
 
 
-//         res.send({ profile, posts })
+        res.send({ profile, posts })
 
-//     } catch (error) {
-//         res.send(error)
+    } catch (error) {
+        res.send(error)
 
-//     }
-// })
+    }
+})
 
 
 router.get('/users/viewProfile/:id', auth, async (req, res) => {
