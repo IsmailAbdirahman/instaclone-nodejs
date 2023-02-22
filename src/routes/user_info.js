@@ -133,7 +133,7 @@ router.get('/users/follow-user/:id', auth, async (req, res) => {
             userToFollowInfo.follower.pull(myID)
             await me.save()
             await userToFollowInfo.save()
-            const status = await UserInfoController.profilseStatus(myID, userToFollowID)
+            const status = await UserInfoController.profileStatus(myID, userToFollowID)
 
             return res.send({ status })
         }

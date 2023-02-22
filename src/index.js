@@ -46,7 +46,7 @@ cloudinary.config({
 //----------------------------------------------------------------------------------//
 const app = express()
 
-const PORT = process.env.PORT || 9000
+const PORT = process.env.PORT || 6000
 //const PORT = 4000
 
 

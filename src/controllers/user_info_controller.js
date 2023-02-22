@@ -4,10 +4,10 @@ const UserPost = require('../model/user_posts')
 
 const profileStatus = async (myID, userID) => {
 	try {
-		let status;
+		let status = "follow";
 
 		const result = await isFollowing(myID, userID)
-		console.log(result);
+		console.log("The result is: ", result);
 
 		if (myID == userID) {
 			return status = null
@@ -26,7 +26,7 @@ const isFollowing = async (myID, userID) => {
 	try {
 		const myProfile = await User.findOne({ _id: myID })
 		const result = await myProfile.following.includes(userID)
-		console.log(myID);
+		console.log('----------------', result);
 		return result
 	} catch (error) {
 		res.send(error)
