@@ -91,6 +91,18 @@ router.get('/users/viewProfile/:id', auth, async (req, res) => {
 })
 
 
+router.get('/users/getStatus/:id', auth, async (req, res) => {
+    try {
+        const status = await UserInfoController.profileStatus(req.user._id, req.params.id)
+        res.send({status})
+
+    } catch (e) {
+        res.send(e.message)
+    }
+
+})
+
+
 router.post('/users/search-username', auth, async (req, res) => {
     try {
 
