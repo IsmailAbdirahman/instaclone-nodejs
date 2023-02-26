@@ -5,6 +5,7 @@ const router = express.Router()
 const User = require('../model/user_model')
 const cloudinary = require('cloudinary');
 const uploader = require('../controllers/multer_storage')
+const UserInfoController = require('../controllers/user_info_controller')
 
 
 
@@ -163,17 +164,20 @@ router.get('/users/getMyFollowingProfile', auth, async (req, res) => {
 
 router.get('/users/getSingleUserFollowingProfiles/:id', auth, async (req, res) => {
     try {
+        const profileList = [];
         const userId = req.params.id
+        const user = await User.findOne({ _id: userId }).lean().exec()
+        const result = await User.find({ _id: { $in: user.following } }).lean()
 
-        const user = await User.findOne({ _id: userId })
-
-        const profileList = await User.find({ _id: { $in: user.following } })
-
+        for (var userInfo of result) {
+            userInfo.status = await UserInfoController.profileStatus(req.user._id, userInfo._id)
+            profileList.push(userInfo)
+        }
 
         res.send({ profileList })
 
     } catch (error) {
-        res.send({ error })
+        res.send(error.message)
 
     }
 })
@@ -181,12 +185,16 @@ router.get('/users/getSingleUserFollowingProfiles/:id', auth, async (req, res) =
 
 router.get('/users/getSingleUserFollowerProfiles/:id', auth, async (req, res) => {
     try {
+        const profileList = [];
         const userId = req.params.id
 
         const user = await User.findOne({ _id: userId })
 
-        const profileList = await User.find({ _id: { $in: user.follower } })
-
+        const result = await User.find({ _id: { $in: user.follower } }).lean()
+        for (var userInfo of result) {
+            userInfo.status = await UserInfoController.profileStatus(req.user._id, userInfo._id)
+            profileList.push(userInfo)
+        }
 
         res.send({ profileList })
 
