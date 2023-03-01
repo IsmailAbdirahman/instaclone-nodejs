@@ -134,7 +134,7 @@ router.get('/users/follow-user/:id', auth, async (req, res) => {
         const userToFollowID = req.params.id
         const myID = req.user._id
         const me = await User.findOne({ _id: myID })
-        const userInfo = await User.findOne({ _id: userToFollowID })
+        const userToFollowInfo = await User.findOne({ _id: userToFollowID })
 
         if (userToFollowID == myID) {
             return res.send('you can not follow this user')
@@ -142,21 +142,21 @@ router.get('/users/follow-user/:id', auth, async (req, res) => {
 
         if (me.following.includes(userToFollowID)) {
             me.following.pull(userToFollowID)
-            userInfo.follower.pull(myID)
+            userToFollowInfo.follower.pull(myID)
             await me.save()
-            await userInfo.save()
+            await userToFollowInfo.save()
             const status = await UserInfoController.profileStatus(myID, userToFollowID)
 
-            return res.send({  userInfo, status })
+            return res.send({ status })
         }
 
         me.following = me.following.concat(userToFollowID)
-        userInfo.follower = userInfo.follower.concat(myID)
+        userToFollowInfo.follower = userToFollowInfo.follower.concat(myID)
         await me.save()
-        await userInfo.save()
+        await userToFollowInfo.save()
         const status = await UserInfoController.profileStatus(myID, userToFollowID)
 
-        res.send({userInfo, status })
+        res.send({ status })
     } catch (e) {
         res.send(e)
     }
