@@ -75,16 +75,17 @@ router.get('/users/myProfile', auth, async (req, res) => {
 
 router.get('/users/viewProfile/:id', auth, async (req, res) => {
     try {
-        const profile = await User.findOne({ _id: req.params.id })
-        await profile.populate('myPosts')
-        const posts = profile.myPosts
+
+        const profile = await User.findOne({ _id: req.params.id }).lean().populate('myPosts')
+        delete profile.tokens
+        profile.myPosts.map((p) => { delete p.author })
 
         const status = await UserInfoController.profileStatus(req.user._id, req.params.id)
 
 
-        res.send({ profile, posts, status })
+        res.send({ profile, status })
     } catch (error) {
-        res.send(error)
+        res.send(error.message)
     }
 
 
@@ -94,7 +95,7 @@ router.get('/users/viewProfile/:id', auth, async (req, res) => {
 router.get('/users/getStatus/:id', auth, async (req, res) => {
     try {
         const status = await UserInfoController.profileStatus(req.user._id, req.params.id)
-        res.send({status})
+        res.send({ status })
 
     } catch (e) {
         res.send(e.message)
