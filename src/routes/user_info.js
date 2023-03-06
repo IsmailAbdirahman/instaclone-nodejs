@@ -98,14 +98,9 @@ router.post('/users/search-username', auth, async (req, res) => {
 
         const username = req.body.username
         const regex = new RegExp(username, 'i')
-        const profile = await User.find({ username: { $regex: regex } })
-            .limit(6).lean().populate('myPosts')
+        const profile = await User.find({ username: { $regex: regex }, }, 'username image ')
+            .limit(6)
 
-        profile.map((p, i) => [
-            delete p.tokens,
-            delete p.myPosts[i].author
-
-        ])
 
 
 
