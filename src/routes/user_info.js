@@ -55,19 +55,16 @@ router.post('/users/login', async (req, res) => {
 
 router.get('/users/myProfile', auth, async (req, res) => {
     try {
-        const _id = req.user._id
+        const id = req.user._id
 
-        const user = await User.findById(_id)
-        await user.populate('myPosts')
+        const profile = await User.findOne({ _id: id }).lean().populate('myPosts')
+        delete profile.tokens
+        profile.myPosts.map((p) => { delete p.author })
 
-        const profile = await User.findOne(_id)
-        const posts = user.myPosts;
-
-
-        res.send({ profile, posts })
+        res.send({ profile })
 
     } catch (error) {
-        res.send(error)
+        res.send(error.message)
 
     }
 })
