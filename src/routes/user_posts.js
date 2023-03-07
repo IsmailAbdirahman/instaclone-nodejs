@@ -166,10 +166,12 @@ router.get('/users/getSingleUserFollowingProfiles/:id', auth, async (req, res) =
     try {
         const profileList = [];
         const userId = req.params.id
-        const user = await User.findOne({ _id: userId }).lean().exec()
-        const result = await User.find({ _id: { $in: user.following } }).lean()
+        const user = await User.findOne({ _id: userId }).lean()
+        const result = await User.find({ _id: { $in: user.following } }).lean().populate('myPosts')
 
         for (var userInfo of result) {
+            delete userInfo.tokens
+            delete userInfo.myPosts.map((p) => { delete p.author })
             userInfo.status = await UserInfoController.profileStatus(req.user._id, userInfo._id)
             profileList.push(userInfo)
         }
@@ -190,8 +192,11 @@ router.get('/users/getSingleUserFollowerProfiles/:id', auth, async (req, res) =>
 
         const user = await User.findOne({ _id: userId })
 
-        const result = await User.find({ _id: { $in: user.follower } }).lean()
+        const result = await User.find({ _id: { $in: user.follower } }).lean().populate('myPosts')
         for (var userInfo of result) {
+            delete userInfo.tokens
+            delete userInfo.myPosts.map((p) => { delete p.author })
+
             userInfo.status = await UserInfoController.profileStatus(req.user._id, userInfo._id)
             profileList.push(userInfo)
         }
@@ -218,3 +223,5 @@ router.post("/users/upload", uploader.single("file"), async (req, res) => {
 
 
 module.exports = router
+
+///TODO: Fix getting list of Following, To Fix:  Add Populate('myPosts) of following  LINE: 165
