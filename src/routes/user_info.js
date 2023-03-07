@@ -77,10 +77,10 @@ router.get('/users/viewProfile/:id', auth, async (req, res) => {
         delete profile.tokens
         profile.myPosts.map((p) => { delete p.author })
 
-        const status = await UserInfoController.profileStatus(req.user._id, req.params.id)
+        profile.status = await UserInfoController.profileStatus(req.user._id, req.params.id)
 
 
-        res.send({ profile, status })
+        res.send({ profile })
     } catch (error) {
         res.send(error.message)
     }
