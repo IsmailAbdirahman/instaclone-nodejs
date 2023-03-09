@@ -155,10 +155,9 @@ router.post('/users/edit-profile', auth, async (req, res) => {
 
         profile.username = req.body.username
         await profile.save()
+        const updatedUsername = await profile.username;
 
-        await profile.populate('myPosts')
-        const posts = await profile.myPosts
-        res.send({ profile, posts })
+        res.send({ updatedUsername })
     } catch (error) {
         res.send(error)
 
