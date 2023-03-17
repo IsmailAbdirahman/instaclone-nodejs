@@ -128,18 +128,22 @@ router.get('/users/follow-user/:id', auth, async (req, res) => {
             userToFollowInfo.follower.pull(myID)
             await me.save()
             await userToFollowInfo.save()
-            const status = await UserInfoController.profileStatus(myID, userToFollowID)
+            const userInfo = await User.findOne({ _id: userToFollowID }).lean().populate('myPosts')
+            userInfo.status = await UserInfoController.profileStatus(myID, userToFollowID)
+            delete userInfo.tokens
 
-            return res.send({ status })
+
+            return res.send({ userInfo })
         }
 
         me.following = me.following.concat(userToFollowID)
         userToFollowInfo.follower = userToFollowInfo.follower.concat(myID)
         await me.save()
         await userToFollowInfo.save()
-        const status = await UserInfoController.profileStatus(myID, userToFollowID)
-
-        res.send({ status })
+        const userInfo = await User.findOne({ _id: userToFollowID }).lean().populate('myPosts')
+        userInfo.status = await UserInfoController.profileStatus(myID, userToFollowID)
+        delete userInfo.tokens
+        res.send({ userInfo })
     } catch (e) {
         res.send(e)
     }
