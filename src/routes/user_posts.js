@@ -86,19 +86,19 @@ router.get('/userpost/likedPost/:id', auth, async (req, res) => {
 
             post.likes.pull(userID)
             myProfile.likedPosts.pull(postID)
-            await post.save()
-            await post.populate('author')
-            await myProfile.save()
-            return res.send(post)
+            const result = await post.save()
+            const likedUsersList = await result.likes
+
+            return res.send({likedUsersList})
         }
 
         post.likes = post.likes.concat(userID)
         myProfile.likedPosts = myProfile.likedPosts.concat(postID)
         await post.save()
-        await post.populate('author')
+        const result = await post.save()
+            const likedUsersList = await result.likes
 
-        await myProfile.save()
-        res.send(post)
+            return res.send({likedUsersList})
 
 
     } catch (error) {
