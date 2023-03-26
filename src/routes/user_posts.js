@@ -130,25 +130,48 @@ router.get('/userpost/getMyFollowingsPosts', auth, async (req, res) => {
 
 
         const myPosts = await UserPosts.find(
-            { author: { $in: myID } })
+            { author: { $in: myID } }).lean()
             .populate({
                 path: 'author', select: 'username image'
             })
             .sort({ 'createdAt': -1 })
+
+        for (var post of myPosts) {
+
+            const result = post.likes.map(p => String(p))
+
+
+            post.isLiked = result.includes(String(myID))
+
+            post.totalLikes = post.likes.length;
+        }
+
+
 
 
         const myFollowingPosts = await UserPosts.find(
-            { author: { $in: req.user.following } })
+            { author: { $in: req.user.following } }).lean()
             .populate({
                 path: 'author', select: 'username image'
             })
             .sort({ 'createdAt': -1 })
 
+            for (var post of myFollowingPosts) {
+
+                const result = post.likes.map(p => String(p))
+
+
+                post.isLiked = result.includes(String(myID))
+
+                post.totalLikes = post.likes.length;
+            }
+
 
         const posts = myPosts.concat(myFollowingPosts)
+
         res.send(posts)
-    } catch (error) {
-        res.send('something went wrong')
+    } catch (e) {
+        res.send(e.message)
 
     }
 
