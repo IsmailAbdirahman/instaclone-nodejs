@@ -71,10 +71,25 @@ router.get('/users/myProfile', auth, async (req, res) => {
 
 
 router.get('/users/viewProfile/:id', auth, async (req, res) => {
+
     try {
+
+        const myID = req.user._id
 
         const profile = await User.findOne({ _id: req.params.id }).lean().populate('myPosts')
         delete profile.tokens
+
+
+        for (var post of profile.myPosts) {
+
+            const result = post.likes.map(p => String(p))
+
+
+            post.isLiked = result.includes(String(myID))
+
+            post.totalLikes = post.likes.length;
+        }
+
         profile.myPosts.map((p) => { delete p.author })
 
         profile.status = await UserInfoController.profileStatus(req.user._id, req.params.id)
