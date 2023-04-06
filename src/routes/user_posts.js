@@ -82,29 +82,41 @@ router.get('/userpost/likedPost/:id', auth, async (req, res) => {
         const post = await UserPosts.findOne({ _id: postID })
         const myProfile = await User.findOne({ _id: userID })
 
+
         if (post.likes.includes(userID) && myProfile.likedPosts.includes(postID)) {
 
             post.likes.pull(userID)
             myProfile.likedPosts.pull(postID)
             await myProfile.save()
-            await post.save()
-            const likedUsersList = await post.likes
+            const result = await post.save()
+            const postObject = result.toObject();
+            delete postObject.author
+            const likesAsString = postObject.likes.map((p) => String(p))
+            postObject.isLiked = likesAsString.includes(String(userID))
+            postObject.totalLikes = postObject.likes.length
 
-            return res.send({ likedUsersList })
+            return res.send({ postObject })
         }
 
         post.likes = post.likes.concat(userID)
         myProfile.likedPosts = myProfile.likedPosts.concat(postID)
         await myProfile.save()
-        await post.save()
-        const likedUsersList = await post.likes
+        const result = await post.save()
+        const postObject = result.toObject();
+        delete postObject.author
+        const likesAsString = postObject.likes.map((p) => String(p))
+        postObject.isLiked = likesAsString.includes(String(userID))
+        postObject.totalLikes = postObject.likes.length
 
 
-        return res.send({ likedUsersList })
+
+
+
+        return res.send({ postObject })
 
 
     } catch (error) {
-        res.send(error)
+        res.send(error.message)
 
     }
 
@@ -156,15 +168,15 @@ router.get('/userpost/getMyFollowingsPosts', auth, async (req, res) => {
             })
             .sort({ 'createdAt': -1 })
 
-            for (var post of myFollowingPosts) {
+        for (var post of myFollowingPosts) {
 
-                const result = post.likes.map(p => String(p))
+            const result = post.likes.map(p => String(p))
 
 
-                post.isLiked = result.includes(String(myID))
+            post.isLiked = result.includes(String(myID))
 
-                post.totalLikes = post.likes.length;
-            }
+            post.totalLikes = post.likes.length;
+        }
 
 
         const posts = myPosts.concat(myFollowingPosts)
