@@ -147,6 +147,16 @@ router.get('/users/follow-user/:id', auth, async (req, res) => {
             userInfo.status = await UserInfoController.profileStatus(myID, userToFollowID)
             delete userInfo.tokens
 
+            const posts = userInfo.myPosts
+
+            for (var post of posts) {
+                const likesAsString = post.likes.map((p) => String(p))
+
+                post.isLiked = likesAsString.includes(String(myID))
+                post.totalLikes = post.likes.length
+
+            }
+
 
             return res.send({ userInfo })
         }
@@ -158,6 +168,15 @@ router.get('/users/follow-user/:id', auth, async (req, res) => {
         const userInfo = await User.findOne({ _id: userToFollowID }).lean().populate('myPosts')
         userInfo.status = await UserInfoController.profileStatus(myID, userToFollowID)
         delete userInfo.tokens
+        const posts = userInfo.myPosts
+
+        for (var post of posts) {
+            const likesAsString = post.likes.map((p) => String(p))
+            post.isLiked = likesAsString.includes(String(myID))
+            post.totalLikes = post.likes.length
+
+        }
+
         res.send({ userInfo })
     } catch (e) {
         res.send(e)
