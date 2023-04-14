@@ -61,6 +61,14 @@ router.get('/users/myProfile', auth, async (req, res) => {
         delete profile.tokens
         profile.myPosts.map((p) => { delete p.author })
 
+
+        for(var post of profile.myPosts){
+            const likesAsString = post.likes.map((p)=> String(p))
+            post.isLiked = likesAsString.includes(String(id))
+            post.totalLikes = post.likes.length
+
+        }
+
         res.send({ profile })
 
     } catch (error) {
