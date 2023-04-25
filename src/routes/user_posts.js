@@ -208,7 +208,17 @@ router.get('/users/getSingleUserFollowingProfiles/:id', auth, async (req, res) =
 
         for (var userInfo of result) {
             delete userInfo.tokens
-            delete userInfo.myPosts.map((p) => { delete p.author })
+            userInfo.myPosts.map((p) => { delete p.author })
+
+            for (var post of userInfo.myPosts) {
+
+                const result = post.likes.map(p => String(p))
+
+
+                post.isLiked = result.includes(String(userId))
+
+                post.totalLikes = post.likes.length;
+            }
             userInfo.status = await UserInfoController.profileStatus(req.user._id, userInfo._id)
             profileList.push(userInfo)
         }
@@ -232,7 +242,17 @@ router.get('/users/getSingleUserFollowerProfiles/:id', auth, async (req, res) =>
         const result = await User.find({ _id: { $in: user.follower } }).lean().populate('myPosts')
         for (var userInfo of result) {
             delete userInfo.tokens
-            delete userInfo.myPosts.map((p) => { delete p.author })
+             userInfo.myPosts.map((p) => { delete p.author })
+
+             for (var post of userInfo.myPosts) {
+
+                const result = post.likes.map(p => String(p))
+
+
+                post.isLiked = result.includes(String(userId))
+
+                post.totalLikes = post.likes.length;
+            }
 
             userInfo.status = await UserInfoController.profileStatus(req.user._id, userInfo._id)
             profileList.push(userInfo)
